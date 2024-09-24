@@ -1,0 +1,57 @@
+id: pdw_usrp_power_cal_table
+label: usrp_power_cal_table
+category: '[pdw]'
+
+templates:
+  imports: import pdw
+  make: pdw.usrp_power_cal_table(${use_cal}, ${freq}, ${ref_level})
+  callbacks:
+    - freq_changed(${freq})
+    - ref_changed(${ref_level})
+
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+parameters:
+- id: usrp_type
+  label: USRP Type
+  dtype: string
+  default: B210
+  options: ['B210']
+  option_labels: ['B210']
+- id: use_cal
+  label: Use Calibration Table?
+  dtype: bool
+  default: True
+  options: [True, False]
+- id: freq
+  label: Frequency (Hz)
+  default: freq
+- id: ref_level
+  label: Reference Level (dBm)
+  default: -10
+
+#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
+#  Keys include:
+#      * label (an identifier for the GUI)
+#      * domain (optional - stream or message. Default is stream)
+#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#      * vlen (optional - data stream vector length. Default is 1)
+#      * optional (optional - set to 1 for optional inputs. Default is 0)
+inputs:
+
+outputs:
+- label: gain_msg
+  domain: message
+  dtype: message
+  optional: 1
+  
+- label: ref_level_msg
+  domain: message
+  dtype: message
+  optional: 1
+#  'file_format' specifies the version of the GRC yml format used in the file
+#  and should usually not be changed.
+file_format: 1

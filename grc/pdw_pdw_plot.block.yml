@@ -1,0 +1,90 @@
+id: pdw_pdw_plot
+label: pdw_plot
+category: '[pdw]'
+
+#templates:
+templates:
+    var_make: self.${id} = None
+    make: |-
+        <%
+            win = '_pdw_plot_%s'%id
+        %>\
+        ${win} = pdw.pdw_plot(${label}, ${plotData}, ${plotLimits}, ${maxPDW}, ${plotItemNum}, ${updateRate}, "${backgroundColor}", "${fontColor}", "${ringColor}", self)
+        self.${id} = ${win}
+
+        ${gui_hint() % win}
+
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+parameters:
+-   id: label
+    label: Label
+    dtype: string
+    hide: ${ ('none' if label else 'part') }
+-   id: plotData
+    label: Plot Data
+    dtype: string
+    default: 'PULSE_WIDTH'
+    options: ['WIDTH', 'POWER', 'FREQ', 'TOA']
+    option_labels: ['Pulse Width (us)', 'Pulse Power (dBm)', 'Pulse Frequency', 'Time of Arrival']
+-   id: plotLimits
+    label: Plot Y-Limits [min, max]
+    dtype: float_vector
+    default: '[]'
+-   id: maxPDW
+    label: Max PDW Per Update
+    dtype: int
+    default: 10
+-   id: plotItemNum
+    label: Max Number of PDW to Display
+    dtype: int
+    default: 250
+-   id: updateRate
+    label: Plot Update Rate (s)
+    dtype: float
+    default: 0.1
+-   id: backgroundColor
+    label: Background
+    dtype: enum
+    default: 'white'
+    options: ['black', 'white', 'blue', 'red', 'green', 'yellow']
+    option_labels: ['black', 'white', 'blue', 'red', 'green', 'yellow']
+    hide: 'part'
+-   id: fontColor
+    label: Font Color
+    dtype: enum
+    default: 'white'
+    options: ['white', 'black', 'blue', 'red', 'green', 'yellow']
+    option_labels: ['white', 'black', 'blue', 'red', 'green', 'yellow']
+    hide: 'part'
+-   id: ringColor
+    label: Ring Color
+    dtype: enum
+    default: 'red'
+    options: ['red', 'white', 'black', 'blue', 'green', 'yellow']
+    option_labels: ['red', 'white', 'black', 'blue', 'green', 'yellow']
+    hide: 'part'
+-   id: gui_hint
+    label: GUI Hint
+    dtype: gui_hint
+    hide: part
+
+#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
+#  Keys include:
+#      * label (an identifier for the GUI)
+#      * domain (optional - stream or message. Default is stream)
+#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#      * vlen (optional - data stream vector length. Default is 1)
+#      * optional (optional - set to 1 for optional inputs. Default is 0)
+
+inputs:
+-   domain: message
+    id: pdw
+    optional: false
+
+#  'file_format' specifies the version of the GRC yml format used in the file
+#  and should usually not be changed.
+file_format: 1

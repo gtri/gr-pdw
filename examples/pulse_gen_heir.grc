@@ -1,0 +1,206 @@
+options:
+  parameters:
+    author: ''
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: Generate pulse waveforms
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: pulses
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Pulse Generator
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: off_samples
+  id: variable
+  parameters:
+    comment: ''
+    value: (0,)*off_samps
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 76.0]
+    rotation: 0
+    state: enabled
+- name: off_samps
+  id: variable
+  parameters:
+    comment: ''
+    value: int(samp_rate*(pri-pulse_width))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 76.0]
+    rotation: 0
+    state: enabled
+- name: on_samples
+  id: variable
+  parameters:
+    comment: ''
+    value: (a,)*on_samps
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 12.0]
+    rotation: 0
+    state: enabled
+- name: on_samps
+  id: variable
+  parameters:
+    comment: ''
+    value: int(samp_rate*pulse_width)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 12.0]
+    rotation: 0
+    state: enabled
+- name: pulse_samples
+  id: variable
+  parameters:
+    comment: ''
+    value: on_samples+off_samples
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [544, 12.0]
+    rotation: 0
+    state: enabled
+- name: a
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Amplitude
+    short_id: ''
+    type: eng_float
+    value: '0.7'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 228.0]
+    rotation: 0
+    state: true
+- name: blocks_vector_source_x_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: complex
+    vector: pulse_samples
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 244.0]
+    rotation: 0
+    state: true
+- name: pad_sink_0
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 260.0]
+    rotation: 0
+    state: true
+- name: pri
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Pulse Repitition Interval (PRI)
+    short_id: ''
+    type: eng_float
+    value: 100e-6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [128, 132.0]
+    rotation: 0
+    state: true
+- name: pulse_width
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Pulse Width (s)
+    short_id: ''
+    type: eng_float
+    value: 1e-6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [128, 228.0]
+    rotation: 0
+    state: true
+- name: samp_rate
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Sample Rate
+    short_id: ''
+    type: eng_float
+    value: 10e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 132.0]
+    rotation: 0
+    state: true
+
+connections:
+- [blocks_vector_source_x_0, '0', pad_sink_0, '0']
+
+metadata:
+  file_format: 1

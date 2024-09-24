@@ -1,0 +1,601 @@
+options:
+  parameters:
+    author: GTRI
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: virtual_pdw
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: SDR PDW Generator
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 12.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 1e9
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [264, 12.0]
+    rotation: 0
+    state: enabled
+- name: maxItemsUpdate
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 140.0]
+    rotation: 0
+    state: enabled
+- name: numPlotItems
+  id: variable
+  parameters:
+    comment: ''
+    value: '250'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 140.0]
+    rotation: 0
+    state: enabled
+- name: plotUpdateRate
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 204.0]
+    rotation: 0
+    state: enabled
+- name: pri
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 4,2,1,1
+    label: PRI
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: 1e-3
+    step: 1e-3
+    stop: 50e-3
+    value: 1e-3
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [616, 12.0]
+    rotation: 0
+    state: enabled
+- name: pulse_freq
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 2,2,1,1
+    label: Pulse Freq (Hz)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: -samp_rate/2
+    step: 10e3
+    stop: samp_rate/2
+    value: '0'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 12.0]
+    rotation: 0
+    state: enabled
+- name: pw
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 1,2,1,1
+    label: Pulse Width (us)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '0.1'
+    stop: '200'
+    value: '5'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [480, 12.0]
+    rotation: 0
+    state: enabled
+- name: ref_level
+  id: variable
+  parameters:
+    comment: ''
+    value: '-10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 76.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 1e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 12.0]
+    rotation: 0
+    state: enabled
+- name: sq_amp
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 0,2,1,1
+    label: Pulse Amplitude
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.01'
+    stop: '1'
+    value: '1'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 12.0]
+    rotation: 0
+    state: enabled
+- name: threshold
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 3,2,1,1
+    label: Pulse Threshold
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.01'
+    stop: '1'
+    value: '0.1'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [736, 12.0]
+    rotation: 0
+    state: enabled
+- name: analog_fastnoise_source_x_0
+  id: analog_fastnoise_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '0.01'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    noise_type: analog.GR_GAUSSIAN
+    samples: '8192'
+    seed: '0'
+    type: complex
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [80, 516.0]
+    rotation: 0
+    state: enabled
+- name: analog_sig_source_x_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '1'
+    comment: ''
+    freq: pulse_freq
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    showports: 'False'
+    type: complex
+    waveform: analog.GR_COS_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [72, 292.0]
+    rotation: 0
+    state: enabled
+- name: blocks_add_xx_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [616, 392.0]
+    rotation: 0
+    state: enabled
+- name: blocks_complex_to_mag_0
+  id: blocks_complex_to_mag
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [976, 504.0]
+    rotation: 180
+    state: enabled
+- name: blocks_multiply_xx_0
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 376.0]
+    rotation: 0
+    state: enabled
+- name: blocks_throttle2_0
+  id: blocks_throttle2
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    limit: auto
+    maximum: '0.1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [424, 380.0]
+    rotation: 0
+    state: enabled
+- name: pdw_pdw_plot_0
+  id: pdw_pdw_plot
+  parameters:
+    affinity: ''
+    alias: ''
+    backgroundColor: white
+    comment: ''
+    fontColor: white
+    gui_hint: 0,0,4,2
+    label: ''
+    maxPDW: maxItemsUpdate
+    plotData: POWER
+    plotItemNum: numPlotItems
+    plotLimits: '[-60,0]'
+    ringColor: red
+    updateRate: plotUpdateRate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 4.0]
+    rotation: 180
+    state: enabled
+- name: pdw_pdw_plot_0_0
+  id: pdw_pdw_plot
+  parameters:
+    affinity: ''
+    alias: ''
+    backgroundColor: white
+    comment: ''
+    fontColor: white
+    gui_hint: 4,0,4,1
+    label: ''
+    maxPDW: maxItemsUpdate
+    plotData: WIDTH
+    plotItemNum: numPlotItems
+    plotLimits: '[]'
+    ringColor: red
+    updateRate: plotUpdateRate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 212.0]
+    rotation: 180
+    state: enabled
+- name: pdw_pdw_plot_0_0_0
+  id: pdw_pdw_plot
+  parameters:
+    affinity: ''
+    alias: ''
+    backgroundColor: white
+    comment: ''
+    fontColor: white
+    gui_hint: 4,1,4,1
+    label: ''
+    maxPDW: maxItemsUpdate
+    plotData: FREQ
+    plotItemNum: numPlotItems
+    plotLimits: '[(-samp_rate/2)/1e6, ( samp_rate/2)/1e6]'
+    ringColor: red
+    updateRate: plotUpdateRate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 108.0]
+    rotation: 180
+    state: enabled
+- name: pdw_pdw_to_file_0
+  id: pdw_pdw_to_file
+  parameters:
+    affinity: ''
+    alias: ''
+    buffer_size: '1000'
+    comment: ''
+    enabled: 'False'
+    file_name: /home/jhumphries33/sdr/git/gr-pdw/examples/test_pdw.hdf5
+    fs: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1144, 428.0]
+    rotation: 180
+    state: true
+- name: pdw_pulse_detect_0
+  id: pdw_pulse_detect
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    fs: samp_rate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    threshold: threshold
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [800, 408.0]
+    rotation: 0
+    state: true
+- name: pdw_pulse_extract_0
+  id: pdw_pulse_extract
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    fs: samp_rate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1168, 344.0]
+    rotation: 0
+    state: enabled
+- name: pdw_virtual_power_cal_table_0
+  id: pdw_virtual_power_cal_table
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    freq: freq
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ref_level: ref_level
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [648, 284.0]
+    rotation: 0
+    state: enabled
+- name: pulses_0
+  id: pulses
+  parameters:
+    a: sq_amp
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pri: pri
+    pulse_width: pw*(1e-6)
+    samp_rate: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 420.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'True'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '2'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '2'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.2'
+    tr_mode: qtgui.TRIG_MODE_NORM
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '2'
+    width10: '1'
+    width2: '2'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [976, 540.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [analog_fastnoise_source_x_0, '0', blocks_add_xx_0, '1']
+- [analog_sig_source_x_0, '0', blocks_multiply_xx_0, '0']
+- [blocks_add_xx_0, '0', pdw_pulse_detect_0, '0']
+- [blocks_complex_to_mag_0, '0', qtgui_time_sink_x_0, '0']
+- [blocks_multiply_xx_0, '0', blocks_throttle2_0, '0']
+- [blocks_throttle2_0, '0', blocks_add_xx_0, '0']
+- [pdw_pulse_detect_0, '0', blocks_complex_to_mag_0, '0']
+- [pdw_pulse_detect_0, '0', pdw_pulse_extract_0, '0']
+- [pdw_pulse_detect_0, '1', qtgui_time_sink_x_0, '1']
+- [pdw_pulse_extract_0, pulse_data, pdw_pdw_plot_0, pdw]
+- [pdw_pulse_extract_0, pulse_data, pdw_pdw_plot_0_0, pdw]
+- [pdw_pulse_extract_0, pulse_data, pdw_pdw_plot_0_0_0, pdw]
+- [pdw_pulse_extract_0, pulse_data, pdw_pdw_to_file_0, pdw_in]
+- [pdw_virtual_power_cal_table_0, ref_level_msg, pdw_pulse_extract_0, set_ref_level]
+- [pulses_0, '0', blocks_multiply_xx_0, '1']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.10.0
