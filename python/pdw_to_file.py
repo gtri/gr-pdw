@@ -86,8 +86,8 @@ class pdw_to_file(gr.sync_block):
 
         self.pdw_header['samp_rate'] = self.fs
 
-        self.np_buffer0 = np.zeros((self.np_buffer_size, 8))
-        self.np_buffer1 = np.zeros((self.np_buffer_size, 8))
+        self.np_buffer0 = np.zeros((self.np_buffer_size, 9))
+        self.np_buffer1 = np.zeros((self.np_buffer_size, 9))
 
         self.first_write_done = False
 
@@ -129,13 +129,14 @@ class pdw_to_file(gr.sync_block):
                         noise_pwr = pdw_data['noise_power_ave']
                         start_freq = pdw_data['start_freq']
                         stop_freq = pdw_data['stop_freq']
-                        pulse_width = pdw_data['pw_clock']
+                        pulse_width_samps = pdw_data['pw_clock']
+                        pulse_width_secs = pdw_data['pw_time']
                         pdw_channel = 0 # We don't specify channel yet
 
                         if self.np_first_buffer:
-                            self.np_buffer0[self.pdw_idx, :] = np.array([pdw_channel, pulse_width, pulse_pwr, noise_pwr, start_freq, stop_freq, course_toa, fine_toa])
+                            self.np_buffer0[self.pdw_idx, :] = np.array([pdw_channel, pulse_width_samps, pulse_width_secs, pulse_pwr, noise_pwr, start_freq, stop_freq, course_toa, fine_toa])
                         else:
-                            self.np_buffer1[self.pdw_idx, :] = np.array([pdw_channel, pulse_width, pulse_pwr, noise_pwr, start_freq, stop_freq, course_toa, fine_toa])
+                            self.np_buffer1[self.pdw_idx, :] = np.array([pdw_channel, pulse_width_samps, pulse_width_secs, pulse_pwr, noise_pwr, start_freq, stop_freq, course_toa, fine_toa])
 
                         self.pdw_idx += 1
 
@@ -157,53 +158,60 @@ class pdw_to_file(gr.sync_block):
                 f.attrs['ref_level'] = self.pdw_header['ref_level']
 
                 # Write the first chunk of data
-                f.create_dataset('pulse_width', data=self.np_buffer0[:,1], chunks=True, maxshape=(None,))
-                f.create_dataset('pulse_power', data=self.np_buffer0[:,2], chunks=True, maxshape=(None,))
-                f.create_dataset('noise_power', data=self.np_buffer0[:,3], chunks=True, maxshape=(None,))
-                f.create_dataset('freq_start', data=self.np_buffer0[:,4], chunks=True, maxshape=(None,))
-                f.create_dataset('toa_course', data=self.np_buffer0[:,6], chunks=True, maxshape=(None,))
-                f.create_dataset('toa_fine', data=self.np_buffer0[:,7], chunks=True, maxshape=(None,))
+                f.create_dataset('pulse_width_samps', data=self.np_buffer0[:,1], chunks=True, maxshape=(None,))
+                f.create_dataset('pulse_width_secs', data=self.np_buffer0[:,2], chunks=True, maxshape=(None,))
+                f.create_dataset('pulse_power', data=self.np_buffer0[:,3], chunks=True, maxshape=(None,))
+                f.create_dataset('noise_power', data=self.np_buffer0[:,4], chunks=True, maxshape=(None,))
+                f.create_dataset('freq_start', data=self.np_buffer0[:,5], chunks=True, maxshape=(None,))
+                f.create_dataset('toa_course', data=self.np_buffer0[:,7], chunks=True, maxshape=(None,))
+                f.create_dataset('toa_fine', data=self.np_buffer0[:,8], chunks=True, maxshape=(None,))
 
         else:
             # Appending data in chunks
             with h5py.File(self.file_name, 'a') as f:
                 if buffer_select:
-                    f['pulse_width'].resize((f['pulse_width'].shape[0]+self.np_buffer0.shape[0]), axis=0)
-                    f['pulse_width'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,1]
+                    f['pulse_width_samps'].resize((f['pulse_width_samps'].shape[0]+self.np_buffer0.shape[0]), axis=0)
+                    f['pulse_width_samps'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,1]
+
+                    f['pulse_width_secs'].resize((f['pulse_width_secs'].shape[0]+self.np_buffer0.shape[0]), axis=0)
+                    f['pulse_width_secs'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,2]
 
                     f['pulse_power'].resize((f['pulse_power'].shape[0]+self.np_buffer0.shape[0]), axis=0)
-                    f['pulse_power'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,2]
+                    f['pulse_power'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,3]
 
                     f['noise_power'].resize((f['noise_power'].shape[0]+self.np_buffer0.shape[0]), axis=0)
-                    f['noise_power'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,3]
+                    f['noise_power'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,4]
 
                     f['freq_start'].resize((f['freq_start'].shape[0]+self.np_buffer0.shape[0]), axis=0)
-                    f['freq_start'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,4]
+                    f['freq_start'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,5]
 
                     f['toa_course'].resize((f['toa_course'].shape[0]+self.np_buffer0.shape[0]), axis=0)
-                    f['toa_course'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,6]
+                    f['toa_course'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,7]
 
                     f['toa_fine'].resize((f['toa_fine'].shape[0]+self.np_buffer0.shape[0]), axis=0)
-                    f['toa_fine'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,7]
+                    f['toa_fine'][-self.np_buffer0.shape[0]:] = self.np_buffer0[:,8]
 
                 else:
-                    f['pulse_width'].resize((f['pulse_width'].shape[0]+self.np_buffer1.shape[0]), axis=0)
-                    f['pulse_width'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,1]
+                    f['pulse_width_samps'].resize((f['pulse_width_samps'].shape[0]+self.np_buffer1.shape[0]), axis=0)
+                    f['pulse_width_samps'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,1]
+
+                    f['pulse_width_secs'].resize((f['pulse_width_secs'].shape[0]+self.np_buffer1.shape[0]), axis=0)
+                    f['pulse_width_secs'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,2]
        
                     f['pulse_power'].resize((f['pulse_power'].shape[0]+self.np_buffer1.shape[0]), axis=0)
-                    f['pulse_power'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,2]
+                    f['pulse_power'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,3]
 
                     f['noise_power'].resize((f['noise_power'].shape[0]+self.np_buffer1.shape[0]), axis=0)
-                    f['noise_power'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,3]
+                    f['noise_power'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,4]
 
                     f['freq_start'].resize((f['freq_start'].shape[0]+self.np_buffer1.shape[0]), axis=0)
-                    f['freq_start'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,4]
+                    f['freq_start'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,5]
 
                     f['toa_course'].resize((f['toa_course'].shape[0]+self.np_buffer1.shape[0]), axis=0)
-                    f['toa_course'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,6]
+                    f['toa_course'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,7]
 
                     f['toa_fine'].resize((f['toa_fine'].shape[0]+self.np_buffer1.shape[0]), axis=0)
-                    f['toa_fine'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,7]
+                    f['toa_fine'][-self.np_buffer1.shape[0]:] = self.np_buffer1[:,8]
 
 
 
