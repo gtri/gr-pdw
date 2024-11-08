@@ -11,7 +11,8 @@ with h5py.File(file_name, 'r') as f:
     print(f"Timestamp: {f.attrs['time_py']}")
     print(f"Unix Timestamp: {f.attrs['time_unix']}")
 
-    pdw_pw = np.array(f['pulse_width'][:])
+    pdw_pw = np.array(f['pulse_width_samps'][:])
+    pdw_pw_secs = np.array(f['pulse_width_secs'][:])
     pdw_pp = f['pulse_power'][:]
     pdw_np = f['noise_power'][:]
     pdw_pf = f['freq_start'][:]
@@ -19,3 +20,4 @@ with h5py.File(file_name, 'r') as f:
     pdw_toa_fine = f['toa_fine'][:]
 
 print(pdw_pw)
+print(pdw_pw_secs)
