@@ -402,14 +402,14 @@ blocks:
     alias: ''
     buffer_size: '1000'
     comment: ''
-    enabled: 'False'
-    file_name: /home/jhumphries33/sdr/git/gr-pdw/examples/test_pdw.hdf5
+    enabled: 'True'
+    file_name: ''
     fs: samp_rate
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1144, 428.0]
+    coordinate: [1168, 412.0]
     rotation: 180
     state: true
 - name: pdw_pulse_detect_0
