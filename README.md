@@ -30,6 +30,12 @@ To install from source:
 
 Steps may vary slightly depending on how your particular GNU Radio environment is setup.
 
+Generate Pulse Generator Heir Block:
+
+* Open GNU Radio Companion (GRC)
+* Load the Pulse Generator Flowgraph: gr-pdw/examples/pulse_gen_heir.grc
+* Generate / Run the Flowgraph
+
 ## Contents
 
 * Blocks
